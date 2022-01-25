@@ -44,7 +44,7 @@ public class Main
         
         for(int lives = 0; lives < t; lives++)
         {
-            String guess = sc.nextLine();
+            String guess = sc.nextLine().toLowerCase();
             
             if(guess.length() != l || !words.contains(guess))
             {
