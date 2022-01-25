@@ -29,7 +29,7 @@ public class Main
         }
         
         ans = words.get((int) (Math.random() * words.size()));
-        ans = "hello";
+        
         //beginning output
         
         for(int i = 0; i < l; i++)
