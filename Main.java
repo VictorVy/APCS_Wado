@@ -1,43 +1,104 @@
 import java.util.*;
 import java.io.*;
 
+/**
+ * () means the character is in the word somewhere
+ * [] means the character is in the word at the same place
+ */
+
 public class Main
 {
-    private static String[] tries = new String[6];
+    private static final int t = 6, l = 5;
+    private static String ans, blank = "\n|";
+    
+    private static String[] tries = new String[t];
     private static ArrayList<String> words = new ArrayList<>();
-    private static String ans;
+    
+    private static int k = 0;
     
     public static void main(String[] args) throws IOException
     {
+        //gathering words and randomizing answer
+        
         Scanner sc = new Scanner(new File("words.txt"));
         
         while(sc.hasNextLine())
         {
             String word = sc.nextLine();
-            if(word.length() == 5) words.add(word.toLowerCase());
+            if(word.length() == l) words.add(word.toLowerCase());
         }
         
-        sc = new Scanner(System.in);
         ans = words.get((int) (Math.random() * words.size()));
-        System.out.println("\n|   |   |   |   |   |\n\n|   |   |   |   |   |\n\n|   |   |   |   |   |\n\n|   |   |   |   |   |\n\n|   |   |   |   |   |\n\n|   |   |   |   |   |");
+        ans = "hello";
+        //beginning output
         
-        for(int lives = 6; lives > 0; lives--)
+        for(int i = 0; i < l; i++)
+            blank += "   |";
+
+        for(int i = 0; i < t; i++)
+            System.out.println(blank);
+            
+        //main loop    
+        
+        sc = new Scanner(System.in);
+        
+        for(int lives = 0; lives < t; lives++)
         {
             String guess = sc.nextLine();
             
-            if(guess.length() != 5 || !words.contains(guess))
+            if(guess.length() != l || !words.contains(guess))
             {
-                lives++;
+                printTries();
+                System.out.println("\nInvalid word!");
+                
+                lives--;
                 continue;
             }
             
-            printGrid(guess);
+            tries[lives] = format(guess);
+            printTries();
+            
+            if(k == l)
+            {
+                System.out.println("\nYou win!");
+                break;
+            }
         }
+        
+        if(k != l) System.out.println("\nYou lose!");
     }
     
-    private static void printGrid(String guess)
+    private static String format(String g) //formats guess into output
     {
+        String a = ans;
+        StringBuilder sb = new StringBuilder("|");
+        k = 0;
         
-        System.out.println("\n|   |   |   |   |   |\n\n|   |   |   |   |   |\n\n|   |   |   |   |   |\n\n|   |   |   |   |   |\n\n|   |   |   |   |   |\n\n|   |   |   |   |   |");
+        for(int i = 0; i < l; i++)
+        {
+            char c = g.charAt(i);
+            
+            if(ans.charAt(i) == c)
+            {
+                sb.append("[").append(c).append("]|");
+                k++;
+            }
+            else if(a.contains("" + c))
+            {
+                sb.append("(").append(c).append(")|");
+                a.replace("" + i, "");
+            }
+            else sb.append(" ").append(c).append(" |");
+        }
+        
+        return sb.toString();
+    }
+    
+    private static void printTries() //outputs guesses
+    {
+        System.out.print("\f");
+        
+        for(int i = 0; i < t; i++)
+            System.out.println(tries[i] == null ? blank : ("\n" + tries[i]));
     }
 }
