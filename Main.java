@@ -37,6 +37,8 @@ public class Main
 
         for(int i = 0; i < t; i++)
             System.out.println(blank);
+        
+        System.out.println("\n() means the letter is in the word somewhere.\n[] means the letter is in the correct place.");
             
         //main loop    
         
